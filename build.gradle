@@ -1,0 +1,45 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:1.5.0'
+  }
+}
+repositories {
+  mavenLocal()
+  jcenter()
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.3"
+
+  defaultConfig {
+    minSdkVersion 9
+    targetSdkVersion 23
+  }
+  dataBinding {
+    enabled = true
+  }
+}
+
+publishing {
+  publications {
+    debug(MavenPublication) {
+      // $ ./gradlew clean assemble publishToMavenLocal
+      groupId 'org.lathanh.android'
+      artifactId 'mvp'
+      version '0.1'
+      artifact("$buildDir/outputs/aar/org.lathanh.android.mvp-debug.aar")
+    }
+  }
+}
+
+dependencies {
+  compile 'com.android.support:recyclerview-v7:23.1.1'
+  compile 'com.android.support:support-annotations:23.1.1'
+}

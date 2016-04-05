@@ -1,0 +1,7 @@
+#== Build & Gradle
+/.gradle/
+/build/
+
+#== IDE & OS
+/.idea/
+*.iml
