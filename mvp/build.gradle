@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.3"
+
+  defaultConfig {
+    minSdkVersion 9
+    targetSdkVersion 23
+  }
+  dataBinding {
+    enabled = true
+  }
+}
+
+publishing {
+  publications {
+    debug(MavenPublication) {
+      // $ ./gradlew clean assemble publishToMavenLocal
+      groupId 'org.lathanh.android'
+      artifactId 'mvp'
+      version '0.2-SNAPSHOT'
+      artifact("$buildDir/outputs/aar/$artifactId-debug.aar")
+    }
+  }
+}
+
+dependencies {
+  compile 'com.android.support:recyclerview-v7:23.1.1'
+  compile 'com.android.support:support-annotations:23.1.1'
+}
