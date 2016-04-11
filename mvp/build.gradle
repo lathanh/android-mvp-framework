@@ -6,7 +6,7 @@ android {
   buildToolsVersion "23.0.3"
 
   defaultConfig {
-    minSdkVersion 9
+    minSdkVersion 11
     targetSdkVersion 23
   }
   dataBinding {
@@ -20,7 +20,7 @@ publishing {
       // $ ./gradlew clean assemble publishToMavenLocal
       groupId 'org.lathanh.android'
       artifactId 'mvp'
-      version '0.2-SNAPSHOT'
+      version '0.2'
       artifact("$buildDir/outputs/aar/$artifactId-debug.aar")
     }
   }

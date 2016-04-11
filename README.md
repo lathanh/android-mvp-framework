@@ -15,7 +15,7 @@ ready (in which case the View will show some sort of loading/progress
 placeholder), and which will then contain the actual View Model when that's 
 ready. This container is called a `AdaptableViewModel` in this framework.
 
-There are actually two frameworks provided here, and each accomplishes the
+There are actually three frameworks provided here, and each accomplishes the
 framework goals in different ways and have their own PROs and CONs:
 
   1. **Simple**: The "Simple" framework handles all of the containers for you.
@@ -31,7 +31,10 @@ framework goals in different ways and have their own PROs and CONs:
      `AdaptableViewModel`.
      This gives you the responsibility/ability to manage your own list of items, 
      as is the case with the base Android `RecyclerView.Adapter`.
-     
+  3. **Presenter**: Adapters, Binders, and ViewHolder factory are provided 
+     together for a given item type. Together, the three compose a Presenter
+     (something that can handle all things presentation of an item).
+  
 These frameworks are designed to be used with RecyclerViews, as opposed to 
 ListViews (but can trivially be rewritten for ListViews), and are best paired 
 with Android Data Binding.
@@ -58,7 +61,7 @@ Terminology
     received from servers or retrieved from databases).
     A more general term, "Adaptable", is used here.
 
-The Two Frameworks
+The Three Frameworks
 -------------------------------------------------------------------------------
 ### Simple
 For the "Simple" framework, you provide a SimpleAdapter that takes in a Data 
@@ -78,6 +81,14 @@ but implementations retain full control of the items list.
 This is more conducive to integration with MergeAdapters and has a more natural 
 flexibility to provide objects that don't need adapting. 
 
+### Presenter
+Takes the "Adaptable" framework further by having the ViewHolder factory and
+Binder also be provided by the consumer.
+This means the consumer is providing the entire Presenter, and makes it easy
+for the BindingAdapter to support heterogeneous items; simply provide a
+presenter for each item type. 
+
+
 Framework Comparison
 -------------------------------------------------------------------------------
 ### View Model
@@ -88,18 +99,18 @@ They are adapted from other plain objects ("Data Models").
 When it comes time to bind, the View Model is `null` if it has not yet been 
 adapted (in which case the View should show some sort of placeholder).
 
-#### Adaptable framework
+#### Adaptable framework and Presenter framework
 The Data Model and View Model are provided together within `AdaptableViewModel` 
 container objects.
 The `AdaptableViewModel` given to the View is never `null`, but the View Model
 within it will be if it has not yet been adapted.
- 
+
 ### Adapter
 #### Simple framework
 A `SimpleAdapter` simply takes an object into its `adapt` method and outputs
 a View Model (another object).
 
-#### Adaptable framework
+#### Adaptable framework  and Presenter framework
 An `AdaptableAdapter` takes an AdaptableViewModel into its `adapt` method, and
 outputs a View Model, which is saved back into the AdaptableViewModel.
 
@@ -122,6 +133,13 @@ data from which it is adapted (Adaptable Data Model).
 In contrast to the SimpleBindingAdapter (which maintains the container/pairing
 internally), this allows the implementations to retain control of the items.
 
+#### PresenterBindAdapter
+For each supported type, an `AdaptableAdapter` (adapts `AdaptableViewModels`), 
+`ViewHolderFactory`, and `Binder` (binds `AdaptableViewModels` to `ViewHolders`
+— together a "Presenter" — are provided.
+This makes it easy to support a heterogeneous list by simply providing a
+Presenter for each type. 
+
 ### Adapt-on-Demand implementations of BindingAdapters
 For a quick start, basic, abstract implementations of Binding Adapters are 
 provide for each framework:
@@ -132,7 +150,7 @@ Each submits the item to be adapted if/when the item comes into view.
 
 Status
 -------------------------------------------------------------------------------
-### Release 0.10
+### Release 0.2.0
 The implementations are proof-of-concept, not yet suitable for practical use.
 
 Future
