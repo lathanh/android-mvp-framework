@@ -1,0 +1,5 @@
+<resources>
+  <dimen name="list_item_progress_text_size">24sp</dimen>
+  <dimen name="list_item_delay_text_size">16sp</dimen>
+  <dimen name="list_item_bind_text_size">16sp</dimen>
+</resources>

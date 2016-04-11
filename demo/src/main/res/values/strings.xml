@@ -1,0 +1,9 @@
+<resources>
+  <string name="app_name">LaThanh.org Android MVP Framework Demos</string>
+
+  <string name="clear">Clear</string>
+
+  <string name="simpleDemo_fragment_name">Demo: Simple</string>
+  <string name="adaptableDemo_fragment_name">Demo: Adaptable</string>
+  <string name="presenterDemo_fragment_name">Demo: Presenter</string>
+</resources>
