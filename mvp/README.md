@@ -1,22 +1,31 @@
-By performing Adapting (making data ready for display) separately from Binding
-(attaching data — ideally that has already been prepared (adapted) — to the
-View), we get [consistently smooth scrolling in
-lists](https://github.com/lathanh/android-mvp-demos), and better separation of
-business logic and presentation.
+Note
+===============================================================================
+To understand what this framework is designed to accomplish, see the
+[README.md](../README.md) in [the parent directory](..).
+It also defines some terms that will be used here (such as "Adapting" or 
+"View Model"), which may be helpful to know since they may be different than how
+they're used/defined elsewhere.
+A noteworthy example: In this framework, the objects responsible for actual 
+Adapting are called Adapters (`SimpleAdapter` and `AdaptableAdapter`), unlike
+Android's RecyclerViewAdapter whose primary job is actually for _Binding_
+adapted data (in View Models) to the View.
 
-This Model-View-Presenter framework provides two frameworks that encourage and
-make it easy for developers to provide "adapters" separately from binding.
-It also makes it easy to take advantage of smart binding adapters that perform
-adapting on-demand in the background.
+Here, we'll focus on the design of the framework and how to use it.
 
+Introduction
+===============================================================================
 In order for adapting to happen in the background, a container "View Model" is
-needed. That is, a View Model that is empty while the adapter data is not
-ready (in which case the View will show some sort of loading/progress
+needed.
+The View Model is actually "empty" container while the data is not yet 
+ready/adapted (in which case the View will show some sort of loading/progress 
 placeholder), and which will then contain the actual View Model when that's
-ready. This container is called a `AdaptableViewModel` in this framework.
+ready.
+This container is called a `AdaptableViewModel` in this framework.
 
-There are actually three frameworks provided here, and each accomplishes the
-framework goals in different ways and have their own PROs and CONs:
+There are actually three frameworks provided here.
+Each accomplishes the framework goals in different ways and have their own
+benefits (e.g., simplicity) and drawbacks (e.g., less flexibility).
+Choose the version that best suits your situation.
 
   1. **Simple**: The "Simple" framework handles all of the containers for you.
      You provide it with the list of items, it puts them into
@@ -35,31 +44,22 @@ framework goals in different ways and have their own PROs and CONs:
      together for a given item type. Together, the three compose a Presenter
      (something that can handle all things presentation of an item).
 
-These frameworks are designed to be used with RecyclerViews, as opposed to
-ListViews (but can trivially be rewritten for ListViews), and are best paired
-with Android Data Binding.
-The [Android MVP Demos](https://github.com/lathanh/android-mvp-demos) has
-examples on using these frameworks.
+These frameworks are designed to be used with RecyclerViews (as opposed to
+ListViews, but can trivially be rewritten for ListViews), and are best paired
+with 
+[Android Data Binding](https://developer.android.com/topic/libraries/data-binding/index.html)
+to bind the ViewModels to the View. 
+The [Demo app](../demo/README.md) has examples on using these frameworks.
 
-Terminology
+Terminology sSpecific to These Frameworks
 -------------------------------------------------------------------------------
-  * **Binding**: Populating Views with values.
-    Ideally, these values have already prepared ("adapted") for the view.
-  * **Adapting**: Preparing data for display; more specifically, preparing for
-    binding to the View.
-  * **RecyclerView.Adapter**: Android's RecyclerView.Adapter's primary job is
-    actually for _Binding_ items (of a list) to recycled views.
-    Because of its misleading name, along with lots of bad examples, _Adapting_
-    is also often performed in RecyclerView.Adapters.
-    In this framework, the objects responsible for actual Adapting are also
-    called Adapters (`SimpleAdapter` and `AdaptableAdapter`).
-  * **View Model**: Since Adapting will be done separately from Binding, an
-    object is needed to hold on to adapted data to then/later be bound.
-    Such objects are called "View Models".
   * **Adaptable** / **Data Model**: The data that needs to be adapted for view
     (adapted into a View Model) are often Data Models (data as they are
     received from servers or retrieved from databases).
     A more general term, "Adaptable", is used here.
+    In in the "simple" framework, there is no "adaptable" object, but parameters
+    maybe be named "adaptable."
+    In the other two frameworks, there are "Adaptable" objects. 
 
 The Three Frameworks
 -------------------------------------------------------------------------------
@@ -83,11 +83,11 @@ flexibility to provide objects that don't need adapting.
 
 ### Presenter
 Takes the "Adaptable" framework further by having the ViewHolder factory and
-Binder also be provided by the consumer.
-This means the consumer is providing the entire Presenter, and makes it easy
-for the BindingAdapter to support heterogeneous items; simply provide a
-presenter for each item type.
-
+Binder also be provided by the consumer along with the Adapter — all together a
+"Presenter."
+This means the consumer is providing everything needed to display Data Model at
+once, which makes it easy for the BindingAdapter to support heterogeneous 
+items; simply provide a Presenter for each item type.
 
 Framework Comparison
 -------------------------------------------------------------------------------
@@ -107,8 +107,8 @@ within it will be if it has not yet been adapted.
 
 ### Adapter
 #### Simple framework
-A `SimpleAdapter` simply takes an object into its `adapt` method and outputs
-a View Model (another object).
+A `SimpleAdapter` simply takes an object (a data model) into its `adapt` method 
+and outputs a View Model (another plain object).
 
 #### Adaptable framework  and Presenter framework
 An `AdaptableAdapter` takes an AdaptableViewModel into its `adapt` method, and
@@ -145,6 +145,7 @@ For a quick start, basic, abstract implementations of Binding Adapters are
 provide for each framework:
   * **Simple**: AdaptOnDemandSimpleBindingAdapter
   * **Adaptable**: AdaptOnDemandBindingAdapter
+  * **Presenter**: AdaptOnDemandPresenterBindingAdapter
 
 Each submits the item to be adapted if/when the item comes into view.
 
@@ -158,6 +159,6 @@ Future
   * There are many things that can be incorporated into better BindingAdapters
     (future implementations, perhaps implemented by others):
       * Queue additional items from the next page so they're ready before being
-        scrolled onto screen
+        scrolled onto screen ("prefetch")
       * Work on adapting all items from the start, not just on demand
       * Prevent duplicate adapting jobs

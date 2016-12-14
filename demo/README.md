@@ -1,6 +1,6 @@
 "Presenter" framework demo
 -------------------------------------------------------------------------------
-For now, just a couple quick hints:
+*This README needs to be written. For now, just a couple quick hints:*
 
   * The list is composed of two types of items, "Green" and "Red", each powered
     by their own Presenter

@@ -36,8 +36,7 @@ public class AdaptableDemo_ViewModel
   //-- Operating fields -------------------------------------------------------
 
   private long onBindTimeNanos;
-  private @NonNull
-  BaseModels.DataModel dataModel;
+  private @NonNull BaseModels.DataModel dataModel;
 
 
   //== Constructors ===========================================================
